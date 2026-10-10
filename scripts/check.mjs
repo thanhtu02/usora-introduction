@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
-const files=['index','policy-privacy','policy-terms','policy-deletion','404'];
+import { policies } from '../content/policies.mjs';
+const policyFiles = policies({ operator: 'Pohatech', email: 'hunglk.dev@gmail.com' }).map(page => page.slug);
+const files=['index', ...policyFiles, '404'];
 for (const file of files) {
   const html=await readFile(`dist/${file}.html`,'utf8');
   assert(html.includes('<html lang="en">'), `${file}: English language required`);
-  assert.equal((html.match(/<h1>/g)||[]).length,1,`${file}: one page heading`);
+  assert.equal((html.match(/<h1(?:\s[^>]*)?>/g)||[]).length,1,`${file}: one page heading`);
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
   assert.equal(ids.length,new Set(ids).size,`${file}: duplicate anchor`);
   for (const [,href] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
@@ -17,6 +19,11 @@ for (const file of files) {
     }
   }
 }
+const childSafety = await readFile('dist/child-safety.html', 'utf8');
+assert(childSafety.includes('<link rel="canonical" href="https://usora.web.app/child-safety">'));
+assert(childSafety.includes('Last updated: October 10, 2026'));
+assert(childSafety.includes('Zero Tolerance for Child Sexual Abuse and Exploitation (CSAE)'));
+assert(childSafety.includes('mailto:hunglk.dev@gmail.com'));
 const firebase=JSON.parse(await readFile('firebase.json','utf8'));
 assert.equal(firebase.hosting.public,'dist');
 assert.equal(firebase.hosting.cleanUrls,true);

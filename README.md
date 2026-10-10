@@ -16,18 +16,15 @@ Open http://127.0.0.1:4173. Routes:
 - `/policy-privacy`: Privacy Policy
 - `/policy-terms`: Terms of Service
 - `/policy-deletion`: account and data deletion information
+- `/child-safety`: Child Safety Standards
 
 Copy lives in `content/policies.mjs`; operator details and publication status live in `content/site.json`. Generated files go to `dist/`. Styling and browser enhancement are in `public/`. Content is readable without JavaScript. Unknown URLs return a real 404 rather than a generic SPA response.
 
 ## Publication status
 
-The site is deployed at **https://usora.web.app** at the user’s request for a permanent production URL. Policy content remains a **labeled draft** with noindex until operator details and practices are verified. Confirm the following with the operator before publication:
+The site is deployed at **https://usora.web.app** at the user’s request for a permanent production URL. The operator, contact address, providers, retention period, subscription details, and publication status have been verified for the current policy copy.
 
-1. Public operator name and a working support/privacy email.
-2. Actual data practices, provider list (including any backend analytics, advertising, or AI services), minimum age, retention rules, and how permanent deletion is handled.
-3. Hosting is resolved: use the dedicated `usora` site. Keep `social-story-staging` (OpenCono) unchanged.
-
-Set `operator`, `email`, and `policyVerified` after incorporating the answers. Deployment is restricted to `usora`. Do not set verification flags merely to bypass deployment checks.
+Hosting uses the dedicated `usora` site. Keep `social-story-staging` (OpenCono) unchanged. Deployment remains restricted to `usora` by `scripts/deploy.mjs`.
 
 The source app at `../../APP/usora` was inspected read-only. Its Profile → Delete Account action invokes `DELETE auth/me`, but the code calls the action `deactivateAccount` and the dialog says the account will be deactivated. Backend deletion semantics have not been verified. The policy accurately discloses this uncertainty; confirm and implement permanent deletion before relying on that flow for App Review. The app's existing policy screens load `about-usora` API content, so publishing this website does not automatically update those in-app screens.
 
@@ -35,7 +32,7 @@ The source app at `../../APP/usora` was inspected read-only. Its Profile → Del
 
 Project: `fe-social-story`. Dedicated Hosting site: `usora`.
 
-Live origin: https://usora.web.app. To publish the labeled draft at the permanent URL, use `npm run deploy -- --allow-draft`. This preserves the draft notice and noindex; it does not mark policy details as verified.
+Live origin: https://usora.web.app.
 
 ```sh
 npm run deploy

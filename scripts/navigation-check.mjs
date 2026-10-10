@@ -23,6 +23,11 @@ try {
   assert.equal(await page.locator('.policy-tabs a:focus').getAttribute('href'), '/policy-terms');
   await page.locator('.policy-tabs a[href="/policy-deletion"]').click();
   assert.equal(await page.locator('h1').textContent(), 'You’re in control.');
+  await page.locator('.policy-tabs a[href="/child-safety"]').click();
+  assert.equal((await page.locator('h1').textContent()).replace(/\s+/g, ' ').trim(), 'Child Safety Standards – Usora');
+  assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), 'https://usora.web.app/child-safety');
+  await page.goBack();
+  assert.equal(await page.locator('h1').textContent(), 'You’re in control.');
   await page.goBack();
   assert.equal(await page.locator('h1').textContent(), 'Our shared ground.');
   await page.goBack();
